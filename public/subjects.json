@@ -1,0 +1,38 @@
+[
+  {
+    "subjectName": "AWS Developer Associate Exam Prep",
+    "description": "Comprehensive course designed to prepare students for the AWS Developer Associate certification exam. Covers core AWS services, best practices, and real-world scenarios. Includes hands-on labs, mock exams, and expert guidance from certified mentors.",
+    "courseImageUrl": "./src/assets/aws-certified-1.webp",
+    "mentorId": 1
+  },
+  {
+    "subjectName": "AWS DevOps Engineering Professional Exam Prep",
+    "description": "In-depth course focused on preparing students for the AWS DevOps Engineering Professional certification exam. Covers advanced AWS services, DevOps best practices, and real-world scenarios. Includes hands-on labs, mock exams, and expert guidance from certified mentors.",
+    "courseImageUrl": "./src/assets/aws-certified-2.webp",
+    "mentorId": 2
+  },
+  {
+    "subjectName": "AWS Machine Learning Specialty Certification Examp Prep",
+    "description": "Specialized course for the AWS Machine Learning Specialty certification exam. Covers advanced machine learning concepts, AWS ML services, and real-world applications. Includes hands-on labs, mock exams, and expert guidance from certified mentors.",
+    "courseImageUrl": "./src/assets/aws-certified-3.webp",
+    "mentorId": 3
+  },
+  {
+    "subjectName": "Microsoft Cybersecurity Architect Expert Certification Exam Prep",
+    "description": "Comprehensive course designed to prepare students for the Microsoft Cybersecurity Architect Expert certification exam. Covers core cybersecurity concepts, best practices, and real-world scenarios. Includes hands-on labs, mock exams, and expert guidance from certified mentors.",
+    "courseImageUrl": "./src/assets/microsoft-certified-1.webp",
+    "mentorId": 4
+  },
+  {
+    "subjectName": "Microsoft Azure Developer Associate Certification Exam Prep",
+    "description": "In-depth course focused on preparing students for the Microsoft Azure Developer Associate certification exam. Covers advanced Azure services, development best practices, and real-world scenarios. Includes hands-on labs, mock exams, and expert guidance from certified mentors.",
+    "courseImageUrl": "./src/assets/microsoft-certified-2.webp",
+    "mentorId": 5
+  },
+  {
+    "subjectName": "Microsoft Azure Data Engineer Associate Certification Exam Prep",
+    "description": "Specialized course for the Microsoft Azure Data Engineer Associate certification exam. Covers advanced data engineering concepts, Azure data services, and real-world applications. Includes hands-on labs, mock exams, and expert guidance from certified mentors.",
+    "courseImageUrl": "./src/assets/microsoft-certified-3.webp",
+    "mentorId": 6
+  }
+]
