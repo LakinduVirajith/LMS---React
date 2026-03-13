@@ -1,10 +1,3 @@
-export interface Subject {
-  id: number;
-  subjectName: string;
-  description: string;
-  courseImageUrl: string;
-}
-
 export interface Mentor {
   id: number;
   mentorId: string;
@@ -32,7 +25,7 @@ export interface Enrollment {
   sessionAt: string;
   durationMinutes: number;
   sessionStatus: string;
-  paymentStatus: 'pending' | 'accepted' | 'completed' | 'cancelled';
+  paymentStatus: 'PENDING' | 'ACCEPTED' | 'COMPLETED' | 'CANCELLED';
   meetingLink: string | null;
 }
 
@@ -40,4 +33,31 @@ export interface User {
   id: string;
   name: string;
   email: string;
+}
+
+export interface PageResponse<T> {
+  content: T[];
+  totalElements: number;
+  totalPages: number;
+  size: number;
+  number: number;
+}
+
+/*------------------------
+    SUBJECT INTERFACES
+-------------------------*/
+export interface Subject {
+  id: number;
+  subjectName: string;
+  description: string | null;
+  courseImageUrl: string | null;
+  mentorId: number;
+  mentorName: string;
+}
+
+export interface SubjectCreateRequest {
+  mentorId: number;
+  subjectName: string;
+  description?: string;
+  courseImageUrl?: string;
 }

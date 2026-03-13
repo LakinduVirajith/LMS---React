@@ -1,48 +1,62 @@
 import { Route, Routes } from 'react-router';
 import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
-import Layout from './Layout';
 import LoginPage from './pages/LoginPage';
 import PaymentPage from './pages/PaymentPage';
 import { Show } from '@clerk/react';
+import AdminLayout from './layouts/AdminLayout';
+import BookingsPage from './pages/admin/BookingsPage';
+import SubjectPage from './pages/admin/SubjectPage';
+import MentorPage from './pages/admin/MentorPage';
+import Layout from './layouts/Layout';
+import CreateSubjectPage from './pages/admin/CreateSubjectPage';
 
 function App() {
   return (
-    <Layout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
+    <Routes>
+      {/* PUBLIC LAYOUT */}
+      <Route element={<Layout />}>
+        <Route index element={<HomePage />} />
+
+        <Route path="login" element={<LoginPage />} />
+
         <Route
-          path="/dashboard"
+          path="dashboard"
           element={
-            <>
-              <Show when="signed-in">
-                <DashboardPage />
-              </Show>
-              <Show when="signed-out">
-                <LoginPage />
-              </Show>
-            </>
-          }
-        />
-        <Route
-          path="/payment/:sessionId"
-          element={
-            <>
-              <Show when="signed-in">
-                <PaymentPage />
-              </Show>
-              <Show when="signed-out">
-                <LoginPage />
-              </Show>
-            </>
+            <Show when="signed-in" fallback={<LoginPage />}>
+              <DashboardPage />
+            </Show>
           }
         />
 
-        {/* 404 Page */}
-        <Route path="*" element={<LoginPage />} />
-      </Routes>
-    </Layout>
+        <Route
+          path="payment/:sessionId"
+          element={
+            <Show when="signed-in" fallback={<LoginPage />}>
+              <PaymentPage />
+            </Show>
+          }
+        />
+      </Route>
+
+      {/* ADMIN LAYOUT */}
+      <Route
+        path="/admin"
+        element={
+          <Show when="signed-in" fallback={<LoginPage />}>
+            <AdminLayout />
+          </Show>
+        }
+      >
+        <Route index path="mentors" element={<MentorPage />} />
+        <Route path="subjects/view" element={<SubjectPage />} />
+        <Route path="subjects/create" element={<CreateSubjectPage />} />
+        <Route path="bookings" element={<BookingsPage />} />
+      </Route>
+
+      {/* 404 */}
+      <Route path="*" element={<LoginPage />} />
+    </Routes>
   );
 }
 
