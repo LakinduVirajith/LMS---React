@@ -32,7 +32,7 @@ export interface Enrollment {
   sessionAt: string;
   durationMinutes: number;
   sessionStatus: string;
-  paymentStatus: 'pending' | 'accepted' | 'completed' | 'cancelled';
+  paymentStatus: 'PENDING' | 'ACCEPTED' | 'COMPLETED' | 'CANCELLED';
   meetingLink: string | null;
 }
 
