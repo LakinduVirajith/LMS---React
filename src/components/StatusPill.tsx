@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils';
 
 interface StatusPillProps {
-  status: 'PENDING' | 'ACCEPTED' | 'COMPLETED' | 'CANCELLED';
+  status: 'pending' | 'accepted' | 'completed' | 'cancelled';
 }
 
 export default function StatusPill({ status }: StatusPillProps) {
@@ -9,10 +9,10 @@ export default function StatusPill({ status }: StatusPillProps) {
     <span
       className={cn(
         'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium',
-        status === 'PENDING' && 'bg-yellow-100 text-yellow-800',
-        status === 'ACCEPTED' && 'bg-blue-100 text-blue-800',
-        status === 'COMPLETED' && 'bg-green-100 text-green-800',
-        status === 'CANCELLED' && 'bg-red-100 text-red-800',
+        status === 'pending' && 'bg-yellow-100 text-yellow-800',
+        status === 'accepted' && 'bg-blue-100 text-blue-800',
+        status === 'completed' && 'bg-green-100 text-green-800',
+        status === 'cancelled' && 'bg-red-100 text-red-800',
       )}
     >
       {status}
