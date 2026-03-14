@@ -1,15 +1,3 @@
-export interface Enrollment {
-  id: number;
-  mentorName: string;
-  mentorProfileImageUrl: string;
-  subjectName: string;
-  sessionAt: string;
-  durationMinutes: number;
-  sessionStatus: string;
-  paymentStatus: 'PENDING' | 'ACCEPTED' | 'COMPLETED' | 'CANCELLED';
-  meetingLink: string | null;
-}
-
 export interface User {
   id: string;
   name: string;
@@ -64,4 +52,20 @@ export interface SubjectCreateRequest {
   subjectName: string;
   description?: string;
   courseImageUrl?: string;
+}
+
+/*------------------------
+    SESSION INTERFACES
+-------------------------*/
+export interface Session {
+  id: number;
+  studentName: string;
+  mentorName: string;
+  mentorProfileImageUrl?: string | null;
+  subjectName: string;
+  sessionAt: string;
+  durationMinutes: number;
+  paymentStatus: 'PENDING' | 'CONFIRMED' | 'COMPLETED';
+  sessionStatus: 'PENDING' | 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
+  meetingLink?: string | null;
 }

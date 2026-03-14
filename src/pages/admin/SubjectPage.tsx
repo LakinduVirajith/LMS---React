@@ -19,7 +19,7 @@ export default function SubjectPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [token, setToken] = useState<string | null>(null);
 
-  // CENTRALIZED TOKEN HANDLER
+  /* ---------------- CENTRALIZED TOKEN HANDLER ---------------- */
   const fetchToken = useCallback(async () => {
     if (!getToken) return null;
     try {
@@ -33,12 +33,11 @@ export default function SubjectPage() {
     }
   }, [getToken]);
 
-  // INITIAL TOKEN FETCH
   useEffect(() => {
     fetchToken().then((t) => setToken(t));
   }, [fetchToken]);
 
-  // FETCH SUBJECTS
+  /* ---------------- FETCH SUBJECTS ---------------- */
   const fetchSubjects = useCallback(
     async (pageNumber: number, initial = false) => {
       if (!token) return;

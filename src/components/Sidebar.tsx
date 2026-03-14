@@ -25,7 +25,7 @@ export default function Sidebar() {
     {
       name: 'Bookings',
       icon: Calendar,
-      children: [{ name: 'View Bookings', path: '/admin/bookings' }],
+      children: [{ name: 'Manage Bookings', path: '/admin/bookings/manage' }],
     },
   ];
 

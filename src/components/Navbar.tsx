@@ -19,7 +19,7 @@ export default function Navbar() {
       )}
     >
       <Link
-        to="/"
+        to="/tutors"
         className="hover:text-primary transition-colors"
         onClick={() => mobile && setIsOpen(false)}
       >
