@@ -10,7 +10,6 @@ export default function StatusPill({ status, type }: StatusPillProps) {
     <span
       className={cn(
         'inline-flex items-center rounded-full px-3 py-1 text-xs font-medium',
-
         // PAYMENT STATUS COLORS
         type === 'payment' &&
           status === 'PENDING' &&
