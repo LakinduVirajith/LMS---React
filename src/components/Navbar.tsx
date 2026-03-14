@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { SignInButton, useAuth, UserButton } from '@clerk/react';
+import { SignInButton, useAuth, UserButton, useUser } from '@clerk/react';
 import SkillMentorLogo from '@/assets/logo.webp';
 import { useState } from 'react';
 import { Link } from 'react-router';
@@ -8,6 +8,8 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
 import { Menu } from 'lucide-react';
 
 export default function Navbar() {
+  const { user, isLoaded } = useUser();
+
   const { isSignedIn } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -41,65 +43,89 @@ export default function Navbar() {
     </nav>
   );
 
-  const AuthButtons = ({ mobile = false }: { mobile?: boolean }) => (
-    <div
-      className={cn(
-        'flex items-center gap-2',
-        mobile && 'flex-col items-stretch gap-4 w-full',
-      )}
-    >
-      {isSignedIn ? (
-        <>
-          <Link to="/dashboard" onClick={() => mobile && setIsOpen(false)}>
-            <Button
-              variant="outline"
-              className={cn(
-                'mx-2 px-4 py-2 rounded-full text-gray-800 hover:text-white hover:bg-gradient-to-r hover:from-green-400 hover:to-teal-500 shadow-sm hover:shadow-lg',
-                mobile && 'w-full',
-              )}
+  const AuthButtons = ({ mobile = false }: { mobile?: boolean }) => {
+    if (!isLoaded) return null;
+
+    const roles = (user?.publicMetadata?.roles as string[]) || [];
+    const isAdmin = roles.includes('ADMIN');
+
+    return (
+      <div
+        className={cn(
+          'flex items-center gap-2',
+          mobile && 'flex-col items-stretch gap-4 w-full',
+        )}
+      >
+        {isSignedIn ? (
+          <>
+            <Link to="/dashboard" onClick={() => mobile && setIsOpen(false)}>
+              <Button
+                variant="outline"
+                className={cn(
+                  'mx-2 px-4 py-2 rounded-full text-gray-800 hover:text-white hover:bg-gradient-to-r hover:from-green-400 hover:to-teal-500 shadow-sm hover:shadow-lg',
+                  mobile && 'w-full',
+                )}
+              >
+                Dashboard
+              </Button>
+            </Link>
+
+            {/* Admin Dashboard button only for admins */}
+            {isAdmin && (
+              <Link to="/admin" onClick={() => mobile && setIsOpen(false)}>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    'mx-2 px-4 py-2 rounded-full text-gray-800 hover:text-white hover:bg-gradient-to-r hover:from-yellow-400 hover:to-orange-500 shadow-sm hover:shadow-lg',
+                    mobile && 'w-full',
+                  )}
+                >
+                  Admin Dashboard
+                </Button>
+              </Link>
+            )}
+
+            <UserButton
+              appearance={{
+                elements: {
+                  avatarBox:
+                    'ml-2 w-9 h-9 border-2 border-gray-600 hover:border-white rounded-full',
+                },
+              }}
+            />
+          </>
+        ) : (
+          <>
+            <SignInButton
+              forceRedirectUrl="/dashboard"
+              mode="modal"
+              appearance={{ elements: { formButtonPrimary: 'bg-primary' } }}
             >
-              Dashboard
-            </Button>
-          </Link>
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox:
-                  'w-9 h-9 border-2 border-gray-600 hover:border-white rounded-full',
-              },
-            }}
-          />
-        </>
-      ) : (
-        <>
-          <SignInButton
-            forceRedirectUrl="/dashboard"
-            mode="modal"
-            appearance={{ elements: { formButtonPrimary: 'bg-primary' } }}
-          >
-            <Button
-              className={cn(
-                'mx-2 px-4 py-2 rounded-full text-gray-200 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-indigo-500 shadow-sm hover:shadow-lg',
-                mobile && 'w-full',
-              )}
-            >
-              Login
-            </Button>
-          </SignInButton>
-          <Link to="/login">
-            <Button
-              className={cn(
-                'px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-sm hover:shadow-lg',
-                mobile && 'w-full',
-              )}
-            >
-              Sign up
-            </Button>
-          </Link>
-        </>
-      )}
-    </div>
-  );
+              <Button
+                className={cn(
+                  'mx-2 px-4 py-2 rounded-full text-gray-200 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-indigo-500 shadow-sm hover:shadow-lg',
+                  mobile && 'w-full',
+                )}
+              >
+                Login
+              </Button>
+            </SignInButton>
+
+            <Link to="/login">
+              <Button
+                className={cn(
+                  'px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-sm hover:shadow-lg',
+                  mobile && 'w-full',
+                )}
+              >
+                Sign up
+              </Button>
+            </Link>
+          </>
+        )}
+      </div>
+    );
+  };
 
   return (
     <header className="sticky top-0 z-50 py-4 px-12 text-white w-full bg-black backdrop-blur supports-[backdrop-filter]:bg-black/90">
