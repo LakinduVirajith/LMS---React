@@ -13,6 +13,7 @@ import { SchedulingModal } from '@/components/SchedulingModel';
 import { SignupDialog } from '@/components/SignUpDialog';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@clerk/react';
+import { useNavigate } from 'react-router';
 
 interface MentorCardProps {
   mentor: Mentor;
@@ -22,7 +23,9 @@ export function MentorCard({ mentor }: MentorCardProps) {
   const [isSchedulingModalOpen, setIsSchedulingModalOpen] = useState(false);
   const [isSignupDialogOpen, setIsSignupDialogOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
+
   const { isSignedIn } = useAuth();
+  const navigate = useNavigate();
 
   const mentorName = `${mentor.firstName} ${mentor.lastName}`;
   const hasSubjects = mentor.subjects.length > 0;
@@ -37,6 +40,10 @@ export function MentorCard({ mentor }: MentorCardProps) {
       return;
     }
     setIsSchedulingModalOpen(true);
+  };
+
+  const navigateToProfile = (id: number) => {
+    navigate(`/tutors/${id}`);
   };
 
   return (
@@ -57,6 +64,9 @@ export function MentorCard({ mentor }: MentorCardProps) {
                   <img
                     src={mentor.profileImageUrl}
                     alt={mentorName}
+                    onClick={() => {
+                      navigateToProfile(mentor.id);
+                    }}
                     className="size-6 object-cover object-top rounded-full"
                   />
                 ) : (

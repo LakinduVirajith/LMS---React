@@ -1,9 +1,3 @@
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-}
-
 export interface PageResponse<T> {
   content: T[];
   totalElements: number;
@@ -68,4 +62,10 @@ export interface Session {
   paymentStatus: 'PENDING' | 'CONFIRMED' | 'COMPLETED';
   sessionStatus: 'PENDING' | 'SCHEDULED' | 'COMPLETED' | 'CANCELLED';
   meetingLink?: string | null;
+}
+
+export interface Review {
+  sessionId: number;
+  review: string;
+  rating: number;
 }

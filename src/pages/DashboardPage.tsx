@@ -1,22 +1,31 @@
 import StatusPill from '@/components/StatusPill';
-import { getUserEnrollments } from '@/lib/api';
-import type { Session } from '@/types';
+import { getUserEnrollments, submitSessionReview } from '@/lib/api';
+import type { Review, Session } from '@/types';
 import { useAuth, useUser } from '@clerk/react';
-import { CalendarDays } from 'lucide-react';
+import { CalendarDays, Star } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { Button } from '@/components/ui/button';
+import ReviewModal from '@/components/ReviewModal';
+import { toast } from 'sonner';
 
 export default function DashboardPage() {
   const { isLoaded, isSignedIn, getToken } = useAuth();
   const { user } = useUser();
   const [enrollment, setEnrollment] = useState<Session[]>([]);
-  const router = useNavigate();
+
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [selectedSession, setSelectedSession] = useState<number | null>(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchEnrollments() {
       if (!user) return;
+
       const token = await getToken({ template: 'lms-auth' });
       if (!token) return;
+
       try {
         const res = await getUserEnrollments(token);
         setEnrollment(res);
@@ -30,77 +39,129 @@ export default function DashboardPage() {
     }
   }, [isLoaded, isSignedIn, getToken, user]);
 
+  const handleReviewSubmit = async (data: Review) => {
+    try {
+      const token = await getToken({ template: 'lms-auth' });
+      if (!token) return;
+
+      await submitSessionReview(token, data);
+
+      toast.success('Review submitted successfully!');
+      setReviewOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to submit review');
+    }
+  };
+
   if (!isLoaded) {
     return (
-      <div className="container py-10">
-        <div className="flex item-center justify-center">
-          <div className="text-lg">Loading...</div>
-        </div>
-      </div>
+      <div className="container py-20 text-center text-lg">Loading...</div>
     );
   }
 
   if (!isSignedIn) {
-    router('/login');
+    navigate('/login');
     return null;
   }
 
   if (!enrollment.length) {
     return (
-      <div className="container py-10">
-        <h1 className="text-3xl font-bold tracking-tight mb-6">
-          My Enrollments
-        </h1>
+      <div className="container py-16 text-center">
+        <h1 className="text-3xl font-bold mb-4">My Sessions</h1>
         <p className="text-muted-foreground">
-          You have no enrollments yet. Browse mentors and book a session!
+          You have no sessions yet. Browse mentors and book a session!
         </p>
       </div>
     );
   }
 
   return (
-    <div className="container py-10">
-      <h1 className="text-3xl font-bold tracking-tight mb-6">My Enrollments</h1>
-      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {enrollment.map((enroll) => (
-          <div
-            key={enroll.id}
-            className="rounded-2xl p-6 relative overflow-hidden bg-linear-to-br from-blue-500 to-blue-600"
-          >
-            {/* STATUS PILL */}
-            <div className="absolute top-4 right-4">
-              <StatusPill status={enroll.paymentStatus} />
-            </div>
+    <>
+      <div className="container p-12">
+        <h1 className="text-3xl font-bold tracking-tight mb-8">My Sessions</h1>
 
-            {/* PROFILE IMAGE */}
-            <div className="size-24 rounded-full bg-white/10 mb-4">
-              {enroll.mentorProfileImageUrl ? (
-                <img
-                  src={enroll.mentorProfileImageUrl}
-                  alt={enroll.mentorName}
-                  className="size-full rounded-full object-cover object-top"
-                />
-              ) : (
-                <div className="size-full rounded-full flex items-center justify-center text-white text-2xl font-bold">
-                  {enroll.mentorName.charAt(0)}
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {enrollment.map((enroll) => {
+            const sessionDate = new Date(enroll.sessionAt);
+
+            return (
+              <div
+                key={enroll.id}
+                className="rounded-2xl border shadow-sm hover:shadow-lg transition p-6 bg-white flex flex-col justify-between"
+              >
+                {/* HEADER */}
+                <div className="flex flex-row justify-end gap-4 mb-4">
+                  <div className="text-xs">
+                    <span className="text-muted-foreground">Session: </span>
+                    <StatusPill status={enroll.sessionStatus} type="session" />
+                  </div>
+
+                  <div className="text-xs">
+                    <span className="text-muted-foreground">Payment: </span>
+                    <StatusPill status={enroll.paymentStatus} type="payment" />
+                  </div>
                 </div>
-              )}
-            </div>
 
-            {/* COURSE INFO */}
-            <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">
-                {enroll.subjectName}
-              </h2>
-              <p className="text-blue-100/80">Mentor: {enroll.mentorName}</p>
-              <div className="flex item-center text-blue-100/80 text-sm mt-2">
-                <CalendarDays className="mr-2 h-4 w-4" />
-                Next Session: {new Date(enroll.sessionAt).toLocaleDateString()}
+                {/* MENTOR */}
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="w-14 h-14 rounded-full overflow-hidden bg-gray-100">
+                    {enroll.mentorProfileImageUrl ? (
+                      <img
+                        src={enroll.mentorProfileImageUrl}
+                        alt={enroll.mentorName}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full text-lg font-semibold">
+                        {enroll.mentorName.charAt(0)}
+                      </div>
+                    )}
+                  </div>
+
+                  <div>
+                    <div className="font-semibold">{enroll.mentorName}</div>
+                    <div className="text-sm text-muted-foreground">
+                      {enroll.subjectName}
+                    </div>
+                  </div>
+                </div>
+
+                {/* SESSION TIME */}
+                <div className="flex items-center text-sm text-muted-foreground mb-4">
+                  <CalendarDays className="w-4 h-4 mr-2" />
+                  {sessionDate.toLocaleDateString()} •{' '}
+                  {sessionDate.toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </div>
+
+                {/* ACTION BUTTON */}
+                {enroll.sessionStatus === 'COMPLETED' && (
+                  <Button
+                    className="mt-auto flex items-center gap-2"
+                    onClick={() => {
+                      setSelectedSession(enroll.id);
+                      setReviewOpen(true);
+                    }}
+                  >
+                    <Star className="w-4 h-4" />
+                    Add Review
+                  </Button>
+                )}
               </div>
-            </div>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
-    </div>
+
+      <ReviewModal
+        open={reviewOpen}
+        onOpenChange={setReviewOpen}
+        sessionId={selectedSession}
+        onSubmit={handleReviewSubmit}
+      />
+    </>
   );
 }

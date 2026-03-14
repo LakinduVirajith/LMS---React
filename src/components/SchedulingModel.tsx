@@ -62,6 +62,18 @@ export function SchedulingModal({
     }
   };
 
+  const isPastTime = (time: string) => {
+    if (!date) return false;
+
+    const now = new Date();
+    const selected = new Date(date);
+
+    const [hours, minutes] = time.split(':');
+    selected.setHours(Number(hours), Number(minutes), 0);
+
+    return selected < now;
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[600px] max-h-[90vh] overflow-y-auto">
@@ -71,6 +83,14 @@ export function SchedulingModal({
             Pick a date and time for your mentoring session with {mentorName}.
           </DialogDescription>
         </DialogHeader>
+        <div className="mb-4">
+          <p className="text-sm text-gray-500">Mentor</p>
+          <p className="font-medium">{mentorName}</p>
+
+          <p className="text-sm text-gray-500 mt-2">Subject</p>
+          <p className="font-medium">{subject?.subjectName}</p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <h4 className="font-medium mb-2">Choose a date</h4>
@@ -78,6 +98,7 @@ export function SchedulingModal({
               mode="single"
               selected={date}
               onSelect={setDate}
+              disabled={(date) => date < new Date()}
               className="rounded-md border"
             />
           </div>
@@ -89,6 +110,7 @@ export function SchedulingModal({
                   key={time}
                   variant={selectedTime === time ? 'default' : 'outline'}
                   className="w-full"
+                  disabled={isPastTime(time)}
                   onClick={() => setSelectedTime(time)}
                 >
                   {time}
@@ -97,6 +119,7 @@ export function SchedulingModal({
             </div>
           </div>
         </div>
+
         <div className="flex justify-end gap-2 mt-6">
           <Button variant="outline" onClick={onClose}>
             Cancel

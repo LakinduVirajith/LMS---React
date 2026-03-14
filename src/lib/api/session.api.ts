@@ -1,5 +1,5 @@
 import { fetchWithAuth } from './client';
-import type { Session } from '@/types';
+import type { Review, Session } from '@/types';
 
 export async function enrollInSession(
   token: string,
@@ -52,4 +52,17 @@ export async function addMeetingLink(token: string, id: number, link: string) {
     method: 'PATCH',
     body: JSON.stringify({ link }),
   });
+}
+
+export async function submitSessionReview(token: string, reviewData: Review) {
+  const res = await fetchWithAuth(
+    `/api/v1/sessions/${reviewData.sessionId}/review`,
+    token,
+    {
+      method: 'PATCH',
+      body: JSON.stringify(reviewData),
+    },
+  );
+
+  return res.json();
 }
