@@ -20,7 +20,7 @@ export default function Navbar() {
     >
       {[
         { name: 'Tutors', to: '/tutors' },
-        { name: 'About Us', to: '/' },
+        { name: 'About Us', to: '/about' },
         { name: 'Resources', to: '/' },
       ].map((item) => (
         <Link

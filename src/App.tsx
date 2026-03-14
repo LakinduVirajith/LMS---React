@@ -13,16 +13,19 @@ import Layout from './layouts/Layout';
 import CreateSubjectPage from './pages/admin/CreateSubjectPage';
 import CreateMentorPage from './pages/admin/CreateMentorPage';
 import TutorProfilePage from './pages/TutorProfilePage';
+import NotFoundPage from './pages/NotFoundPage';
+import AboutUsPage from './pages/AboutUsPage';
 
 function App() {
   return (
     <Routes>
       {/* PUBLIC LAYOUT */}
-      <Route element={<Layout />}>
+      <Route path="" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="/tutors" element={<TutorsPage />} />
-        <Route path="/tutors/:mentorId" element={<TutorProfilePage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="tutors" element={<TutorsPage />} />
+        <Route path="tutors/:mentorId" element={<TutorProfilePage />} />
+        <Route path="about" element={<AboutUsPage />} />
 
         <Route
           path="dashboard"
@@ -45,14 +48,15 @@ function App() {
 
       {/* ADMIN LAYOUT */}
       <Route
-        path="/admin"
+        path="admin"
         element={
           <Show when="signed-in" fallback={<LoginPage />}>
             <AdminLayout />
           </Show>
         }
       >
-        <Route index path="mentors/view" element={<MentorPage />} />
+        <Route index element={<MentorPage />} />
+        <Route path="mentors/view" element={<MentorPage />} />
         <Route path="mentors/create" element={<CreateMentorPage />} />
         <Route path="subjects/view" element={<SubjectPage />} />
         <Route path="subjects/create" element={<CreateSubjectPage />} />
@@ -60,7 +64,7 @@ function App() {
       </Route>
 
       {/* 404 */}
-      <Route path="*" element={<LoginPage />} />
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
