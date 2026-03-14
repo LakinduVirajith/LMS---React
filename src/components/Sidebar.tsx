@@ -10,7 +10,7 @@ export default function Sidebar() {
       name: 'Mentors',
       icon: Users,
       children: [
-        { name: 'View Mentors', path: '/admin/mentors' },
+        { name: 'View Mentors', path: '/admin/mentors/view' },
         { name: 'Create Mentor', path: '/admin/mentors/create' },
       ],
     },

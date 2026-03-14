@@ -1,22 +1,3 @@
-export interface Mentor {
-  id: number;
-  mentorId: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  title: string;
-  profession: string;
-  company: string;
-  experienceYears: number;
-  bio: string;
-  profileImageUrl: string;
-  positiveReviews: number;
-  totalEnrollments: number;
-  isCertified: boolean;
-  startYear: string;
-  subjects: Subject[];
-}
-
 export interface Enrollment {
   id: number;
   mentorName: string;
@@ -41,6 +22,29 @@ export interface PageResponse<T> {
   totalPages: number;
   size: number;
   number: number;
+}
+
+/*------------------------
+    MENTOR INTERFACES
+-------------------------*/
+export interface Mentor {
+  id: number;
+  mentorId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
+  title: string;
+  profession: string;
+  company: string;
+  experienceYears: number;
+  bio: string;
+  profileImageUrl?: string;
+  positiveReviews?: number;
+  totalEnrollments?: number;
+  isCertified: boolean;
+  startYear: number;
+  subjects?: Subject[];
 }
 
 /*------------------------

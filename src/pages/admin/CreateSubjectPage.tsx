@@ -53,7 +53,7 @@ export default function CreateSubjectPage() {
 
   const onSubmit = async (values: SubjectCreateRequest) => {
     try {
-      const token = await getToken();
+      const token = await getToken({ template: 'lms-auth' });
       if (!token) throw new Error('Unauthorized');
 
       await createSubject(token, values);
