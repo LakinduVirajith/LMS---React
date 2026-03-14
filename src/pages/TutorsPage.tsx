@@ -3,7 +3,6 @@ import { toast } from 'sonner';
 import { getMentors } from '@/lib/api';
 import type { Mentor } from '@/types';
 import { Input } from '@/components/ui/input';
-import { useAuth } from '@clerk/react';
 import { useNavigate } from 'react-router';
 import TutorCard from '@/components/TutorCard';
 import { Button } from '@/components/ui/button';
@@ -12,7 +11,6 @@ import { Search } from 'lucide-react';
 const PAGE_SIZE = 6;
 
 export default function TutorsPage() {
-  const { getToken } = useAuth();
   const navigate = useNavigate();
 
   const [mentors, setMentors] = useState<Mentor[]>([]);
@@ -22,41 +20,35 @@ export default function TutorsPage() {
   const [hasMore, setHasMore] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const fetchMentors = useCallback(
-    async (pageNumber: number, search = '') => {
-      try {
-        if (pageNumber === 0) setLoading(true);
-        else setLoadingMore(true);
+  const fetchMentors = useCallback(async (pageNumber: number, search = '') => {
+    try {
+      if (pageNumber === 0) setLoading(true);
+      else setLoadingMore(true);
 
-        const token = await getToken({ template: 'lms-auth' });
-        if (!token) throw new Error('Unauthorized');
+      const data = await getMentors(pageNumber, PAGE_SIZE);
 
-        const data = await getMentors(pageNumber, PAGE_SIZE);
+      const filtered = search
+        ? data.content.filter(
+            (m) =>
+              m.firstName.toLowerCase().includes(search.toLowerCase()) ||
+              m.lastName.toLowerCase().includes(search.toLowerCase()) ||
+              m.email.toLowerCase().includes(search.toLowerCase()),
+          )
+        : data.content;
 
-        const filtered = search
-          ? data.content.filter(
-              (m) =>
-                m.firstName.toLowerCase().includes(search.toLowerCase()) ||
-                m.lastName.toLowerCase().includes(search.toLowerCase()) ||
-                m.email.toLowerCase().includes(search.toLowerCase()),
-            )
-          : data.content;
+      if (pageNumber === 0) setMentors(filtered);
+      else setMentors((prev) => [...prev, ...filtered]);
 
-        if (pageNumber === 0) setMentors(filtered);
-        else setMentors((prev) => [...prev, ...filtered]);
-
-        setHasMore(pageNumber + 1 < data.totalPages);
-        setPage(pageNumber);
-      } catch (err) {
-        console.error(err);
-        toast.error('Failed to load tutors');
-      } finally {
-        setLoading(false);
-        setLoadingMore(false);
-      }
-    },
-    [getToken],
-  );
+      setHasMore(pageNumber + 1 < data.totalPages);
+      setPage(pageNumber);
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to load tutors');
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchMentors(0, searchTerm);
