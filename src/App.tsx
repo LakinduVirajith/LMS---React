@@ -12,6 +12,7 @@ import MentorPage from './pages/admin/MentorPage';
 import Layout from './layouts/Layout';
 import CreateSubjectPage from './pages/admin/CreateSubjectPage';
 import CreateMentorPage from './pages/admin/CreateMentorPage';
+import TutorProfilePage from './pages/TutorProfilePage';
 
 function App() {
   return (
@@ -19,8 +20,9 @@ function App() {
       {/* PUBLIC LAYOUT */}
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="tutors" element={<TutorsPage />} />
-        <Route path="login" element={<LoginPage />} />
+        <Route path="/tutors" element={<TutorsPage />} />
+        <Route path="/tutors/:mentorId" element={<TutorProfilePage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         <Route
           path="dashboard"

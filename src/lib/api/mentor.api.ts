@@ -14,6 +14,11 @@ export async function getMentors(
   return res.json();
 }
 
+export async function getMentorById(mentorId: number) {
+  const res = await fetchPublic(`/api/v1/mentors/${mentorId}`);
+  return res.json();
+}
+
 export async function createMentor(
   token: string,
   mentorData: Omit<Mentor, 'id'>,

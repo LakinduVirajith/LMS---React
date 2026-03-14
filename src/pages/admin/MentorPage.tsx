@@ -3,10 +3,11 @@ import { toast } from 'sonner';
 
 import { deleteMentor, getMentors } from '@/lib/api';
 import type { Mentor } from '@/types';
-import { Loader2, Pencil, Search, Trash } from 'lucide-react';
+import { Loader2, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@clerk/react';
+import TutorCard from '@/components/TutorCard';
 
 const PAGE_SIZE = 6;
 
@@ -107,65 +108,12 @@ export default function MentorPage() {
 
       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {mentors.map((mentor) => (
-          <div
+          <TutorCard
             key={mentor.id}
-            className="border rounded-xl shadow-md bg-white hover:shadow-lg transition flex flex-col overflow-hidden"
-          >
-            {/* IMAGE */}
-            {mentor.profileImageUrl && (
-              <div className="h-40 w-full overflow-hidden flex justify-center bg-gray-50">
-                <img
-                  src={mentor.profileImageUrl}
-                  alt={`${mentor.firstName} ${mentor.lastName}`}
-                  className="h-full object-cover"
-                />
-              </div>
-            )}
-
-            {/* CONTENT */}
-            <div className="p-5 flex flex-col flex-1">
-              <div className="flex-1">
-                <h2 className="text-lg font-semibold">
-                  {mentor.firstName} {mentor.lastName}
-                </h2>
-
-                <div className="text-sm text-gray-500 mt-1">{mentor.email}</div>
-
-                {mentor.phoneNumber && (
-                  <div className="text-sm text-gray-500">
-                    {mentor.phoneNumber}
-                  </div>
-                )}
-
-                {mentor.title && (
-                  <div className="text-sm text-gray-500 mt-1">
-                    {mentor.title}
-                  </div>
-                )}
-              </div>
-
-              {/* ACTION BUTTONS */}
-              <div className="flex gap-3 mt-4">
-                <Button
-                  onClick={() => handleEdit(mentor)}
-                  variant="outline"
-                  className="flex-1 flex items-center justify-center gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
-                >
-                  <Pencil size={16} />
-                  Edit
-                </Button>
-
-                <Button
-                  onClick={() => handleDelete(mentor)}
-                  variant="outline"
-                  className="flex-1 flex items-center justify-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
-                >
-                  <Trash size={16} />
-                  Delete
-                </Button>
-              </div>
-            </div>
-          </div>
+            mentor={mentor}
+            onEdit={handleEdit}
+            onDelete={handleDelete}
+          />
         ))}
       </div>
 
