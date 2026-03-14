@@ -10,6 +10,7 @@ import SubjectPage from './pages/admin/SubjectPage';
 import MentorPage from './pages/admin/MentorPage';
 import Layout from './layouts/Layout';
 import CreateSubjectPage from './pages/admin/CreateSubjectPage';
+import CreateMentorPage from './pages/admin/CreateMentorPage';
 
 function App() {
   return (
@@ -48,7 +49,8 @@ function App() {
           </Show>
         }
       >
-        <Route index path="mentors" element={<MentorPage />} />
+        <Route index path="mentors/view" element={<MentorPage />} />
+        <Route path="mentors/create" element={<CreateMentorPage />} />
         <Route path="subjects/view" element={<SubjectPage />} />
         <Route path="subjects/create" element={<CreateSubjectPage />} />
         <Route path="bookings" element={<BookingsPage />} />

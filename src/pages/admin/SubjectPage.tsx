@@ -23,7 +23,7 @@ export default function SubjectPage() {
   const fetchToken = useCallback(async () => {
     if (!getToken) return null;
     try {
-      const t = await getToken();
+      const t = await getToken({ template: 'lms-auth' });
       if (!t) throw new Error('Unauthorized');
       return t;
     } catch (err) {
@@ -98,57 +98,74 @@ export default function SubjectPage() {
   };
 
   if (loading) {
-    return <div className="p-8 text-gray-500">Loading subjects...</div>;
+    return <div className="px-8 text-gray-500">Loading subjects...</div>;
   }
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-6">Subjects</h1>
+    <div className="px-8">
+      <h1 className="text-2xl font-bold mb-4">Subjects</h1>
 
       {subjects.length === 0 ? (
-        <div className="text-gray-500">No subjects found</div>
+        <div className="text-gray-500 text-lg text-center mt-12">
+          No subjects found
+        </div>
       ) : (
-        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {subjects.map((subject) => (
             <div
               key={subject.id}
-              className="border rounded-xl p-6 shadow-sm bg-white hover:shadow-md transition-shadow flex flex-col justify-between"
+              className="border rounded-xl shadow-md bg-white hover:shadow-xl transition flex flex-col overflow-hidden"
             >
-              <div>
-                <h2 className="text-lg font-semibold">{subject.subjectName}</h2>
+              {/* IMAGE */}
+              {subject.courseImageUrl && (
+                <div className="flex justify-center mt-4 h-40 w-full overflow-hidden">
+                  <img
+                    src={subject.courseImageUrl}
+                    alt={subject.subjectName}
+                    className="w-40 h-40 object-cover"
+                  />
+                </div>
+              )}
 
-                {subject.description && (
-                  <p className="text-sm text-gray-500 mt-2">
-                    {subject.description}
-                  </p>
-                )}
+              {/* CONTENT */}
+              <div className="p-5 flex flex-col flex-1">
+                <div className="flex-1">
+                  <h2 className="text-lg font-semibold">
+                    {subject.subjectName}
+                  </h2>
 
-                <div className="text-sm text-gray-400 mt-3">
-                  Mentor: {subject.mentorName} (ID: {subject.mentorId})
+                  {subject.description && (
+                    <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                      {subject.description}
+                    </p>
+                  )}
+
+                  <div className="text-sm text-gray-400 mt-3">
+                    Mentor:{' '}
+                    <span className="font-medium">{subject.mentorName}</span>
+                  </div>
                 </div>
 
-                {subject.courseImageUrl && (
-                  <div className="flex justify-center my-4">
-                    <img
-                      src={subject.courseImageUrl}
-                      alt={subject.subjectName}
-                      className="w-60 h-60 object-cover rounded-md border"
-                    />
-                  </div>
-                )}
-              </div>
+                {/* BUTTONS */}
+                <div className="flex gap-3 mt-4">
+                  <Button
+                    onClick={() => handleEdit(subject)}
+                    variant="outline"
+                    className="flex-1 flex items-center justify-center gap-2 text-blue-600 border-blue-200 hover:bg-blue-50"
+                  >
+                    <Pencil size={16} />
+                    Edit
+                  </Button>
 
-              <div className="flex flex-col gap-2">
-                <Button onClick={() => handleEdit(subject)}>
-                  <Pencil size={16} /> Edit
-                </Button>
-
-                <Button
-                  onClick={() => handleDelete(subject)}
-                  variant="secondary"
-                >
-                  <Trash size={16} /> Delete
-                </Button>
+                  <Button
+                    onClick={() => handleDelete(subject)}
+                    variant="outline"
+                    className="flex-1 flex items-center justify-center gap-2 text-red-600 border-red-200 hover:bg-red-50"
+                  >
+                    <Trash size={16} />
+                    Delete
+                  </Button>
+                </div>
               </div>
             </div>
           ))}
@@ -156,9 +173,9 @@ export default function SubjectPage() {
       )}
 
       {hasMore && (
-        <div className="flex justify-center mt-6">
+        <div className="flex justify-center mt-10">
           <Button onClick={handleLoadMore} disabled={loadingMore}>
-            {loadingMore && <Loader2 className="animate-spin w-5 h-5" />}
+            {loadingMore && <Loader2 className="animate-spin w-5 h-5 mr-2" />}
             {loadingMore ? 'Loading...' : 'Load More'}
           </Button>
         </div>

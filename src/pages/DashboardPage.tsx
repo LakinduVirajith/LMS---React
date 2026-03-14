@@ -18,7 +18,6 @@ export default function DashboardPage() {
       const token = await getToken({ template: 'lms-auth' });
       if (!token) return;
       try {
-        console.log('Fetching enrollments with token:', token);
         const res = await getUserEnrollments(token);
         setEnrollment(res);
       } catch (error) {
