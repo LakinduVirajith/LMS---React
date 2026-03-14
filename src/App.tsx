@@ -3,6 +3,7 @@ import DashboardPage from './pages/DashboardPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import PaymentPage from './pages/PaymentPage';
+import TutorsPage from './pages/TutorsPage';
 import { Show } from '@clerk/react';
 import AdminLayout from './layouts/AdminLayout';
 import BookingsPage from './pages/admin/BookingsPage';
@@ -18,7 +19,7 @@ function App() {
       {/* PUBLIC LAYOUT */}
       <Route element={<Layout />}>
         <Route index element={<HomePage />} />
-
+        <Route path="tutors" element={<TutorsPage />} />
         <Route path="login" element={<LoginPage />} />
 
         <Route
@@ -53,7 +54,7 @@ function App() {
         <Route path="mentors/create" element={<CreateMentorPage />} />
         <Route path="subjects/view" element={<SubjectPage />} />
         <Route path="subjects/create" element={<CreateSubjectPage />} />
-        <Route path="bookings" element={<BookingsPage />} />
+        <Route path="bookings/manage" element={<BookingsPage />} />
       </Route>
 
       {/* 404 */}

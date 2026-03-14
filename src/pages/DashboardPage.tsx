@@ -1,6 +1,6 @@
 import StatusPill from '@/components/StatusPill';
 import { getUserEnrollments } from '@/lib/api';
-import type { Enrollment } from '@/types';
+import type { Session } from '@/types';
 import { useAuth, useUser } from '@clerk/react';
 import { CalendarDays } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router';
 export default function DashboardPage() {
   const { isLoaded, isSignedIn, getToken } = useAuth();
   const { user } = useUser();
-  const [enrollment, setEnrollment] = useState<Enrollment[]>([]);
+  const [enrollment, setEnrollment] = useState<Session[]>([]);
   const router = useNavigate();
 
   useEffect(() => {
