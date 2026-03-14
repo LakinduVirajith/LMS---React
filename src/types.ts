@@ -44,7 +44,7 @@ export interface Mentor {
   totalEnrollments?: number;
   isCertified: boolean;
   startYear: number;
-  subjects?: Subject[];
+  subjects: Subject[];
 }
 
 /*------------------------
