@@ -14,31 +14,30 @@ export default function Navbar() {
   const NavItems = ({ mobile = false }: { mobile?: boolean }) => (
     <nav
       className={cn(
-        'flex items-center gap-6 text-sm font-medium',
+        'flex items-center gap-4 text-sm font-medium',
         mobile && 'flex-col items-start gap-4',
       )}
     >
-      <Link
-        to="/"
-        className="hover:text-primary transition-colors"
-        onClick={() => mobile && setIsOpen(false)}
-      >
-        Tutors
-      </Link>
-      <Link
-        to="/"
-        className="hover:text-primary transition-colors"
-        onClick={() => mobile && setIsOpen(false)}
-      >
-        About Us
-      </Link>
-      <Link
-        to="/"
-        className="hover:text-primary transition-colors"
-        onClick={() => mobile && setIsOpen(false)}
-      >
-        Resources
-      </Link>
+      {[
+        { name: 'Tutors', to: '/tutors' },
+        { name: 'About Us', to: '/' },
+        { name: 'Resources', to: '/' },
+      ].map((item) => (
+        <Link
+          key={item.to}
+          to={item.to}
+          onClick={() => mobile && setIsOpen(false)}
+          className={`
+          relative inline-block px-4 py-2 rounded-full font-medium
+          text-gray-200 hover:text-white transition-colors duration-300
+          hover:bg-gradient-to-r hover:from-blue-500 hover:to-indigo-500
+          shadow-sm hover:shadow-lg
+          focus:outline-none focus:ring-2 focus:ring-blue-400
+        `}
+        >
+          {item.name}
+        </Link>
+      ))}
     </nav>
   );
 
@@ -51,49 +50,46 @@ export default function Navbar() {
     >
       {isSignedIn ? (
         <>
-          <Link
-            to="/dashboard"
-            className={cn(mobile && 'w-full')}
-            onClick={() => mobile && setIsOpen(false)}
-          >
-            <Button variant="ghost" className={cn(mobile && 'w-full')}>
+          <Link to="/dashboard" onClick={() => mobile && setIsOpen(false)}>
+            <Button
+              variant="outline"
+              className={cn(
+                'mx-2 px-4 py-2 rounded-full text-gray-800 hover:text-white hover:bg-gradient-to-r hover:from-green-400 hover:to-teal-500 shadow-sm hover:shadow-lg',
+                mobile && 'w-full',
+              )}
+            >
               Dashboard
             </Button>
           </Link>
-          <div
-            className={cn(
-              'flex items-center',
-              mobile && 'w-full justify-center',
-            )}
-          >
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: 'w-8 h-8',
-                },
-              }}
-            />
-          </div>
+          <UserButton
+            appearance={{
+              elements: {
+                avatarBox:
+                  'w-9 h-9 border-2 border-gray-600 hover:border-white rounded-full',
+              },
+            }}
+          />
         </>
       ) : (
         <>
           <SignInButton
             forceRedirectUrl="/dashboard"
             mode="modal"
-            appearance={{
-              elements: {
-                formButtonPrimary: 'bg-primary',
-              },
-            }}
+            appearance={{ elements: { formButtonPrimary: 'bg-primary' } }}
           >
-            <Button variant="ghost" className={cn(mobile && 'w-full')}>
+            <Button
+              className={cn(
+                'mx-2 px-4 py-2 rounded-full text-gray-200 hover:text-white hover:bg-gradient-to-r hover:from-blue-500 hover:to-indigo-500 shadow-sm hover:shadow-lg',
+                mobile && 'w-full',
+              )}
+            >
               Login
             </Button>
           </SignInButton>
           <Link to="/login">
             <Button
               className={cn(
-                'bg-primary text-primary-foreground hover:bg-primary/90',
+                'px-4 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-sm hover:shadow-lg',
                 mobile && 'w-full',
               )}
             >
@@ -106,7 +102,7 @@ export default function Navbar() {
   );
 
   return (
-    <header className="sticky top-0 z-50 py-2 text-white w-full bg-black backdrop-blur supports-[backdrop-filter]:bg-black/90">
+    <header className="sticky top-0 z-50 py-4 px-12 text-white w-full bg-black backdrop-blur supports-[backdrop-filter]:bg-black/90">
       <div className="container flex flex-wrap h-14 items-center justify-between">
         <div className="flex items-center">
           <Link to="/" className="flex items-center space-x-2">

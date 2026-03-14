@@ -27,7 +27,7 @@ export default function HomePage() {
   }, []);
 
   return (
-    <div className="py-10">
+    <div className="p-12">
       <div className="flex flex-col items-center justify-center space-y-8 text-center py-8">
         <div className="space-y-2">
           <h1 className="text-5xl tracking-tighter sm:text-5xl md:text-6xl lg:text-7xl">
